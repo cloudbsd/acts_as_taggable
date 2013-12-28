@@ -1,0 +1,2 @@
+module ActsAsTaggable
+end
