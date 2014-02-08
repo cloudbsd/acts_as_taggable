@@ -103,42 +103,38 @@ class ActsAsTaggableTest < ActiveSupport::TestCase
 
     assert_equal 0, post1.favorite_taggings.count
     assert_equal 0, post1.favorite_tags.count
-  # user1.tag(tag1, post1, 'favorite')
+
     post1.favorite_by tag1, user1
     assert_equal 1, post1.taggings.where(context: 'favorite').size
     assert_equal 1, post1.favorite_taggings.count
     assert_equal 1, post1.favorite_tags.count
+    assert_equal 1, post1.favorite_taggings.size
+    assert_equal 1, post1.favorite_tags.count
+    assert_equal 'vector', post1.favorite_tag_list
 
-    p post1.favorite_taggings.size
-    p post1.favorite_tags.count
-    p post1.favorite_tag_list
-
-  # user1.tag(tag2, post1, 'favorite')
     post1.favorite_by tag2, user1
-    p post1.favorite_taggings.size
-    p post1.favorite_tags.count
-    p post1.favorite_tag_list
+    assert_equal 2, post1.favorite_taggings.size
+    assert_equal 2, post1.favorite_tags.count
+    assert_equal 'vector, list', post1.favorite_tag_list
 
     post1.favorite_tag_list = 'ruby, rails, gems'
-    p post1.favorite_taggings.size
-    p post1.favorite_tags.count
-    p post1.favorite_tag_list
+    assert_equal 3, post1.favorite_taggings.size
+    assert_equal 3, post1.favorite_tags.count
+    assert_equal 'ruby, rails, gems', post1.favorite_tag_list
 
     tagging = post1.tag_by tag3, user1, 'favorite'
-    p post1.favorite_taggings.size
-  # post1.favorite_taggings << tagging
-    p post1.favorite_tags.count
-    p post1.favorite_tag_list
-  # p post1.favorite_tags << tag3
+    assert_equal 4, post1.favorite_taggings.size
+    assert_equal 4, post1.favorite_tags.count
+    assert_equal 'ruby, rails, gems, deque', post1.favorite_tag_list
 
-  # assert_equal 0, post1.read_users_taggings.count
-  # assert_equal 0, post1.read_users.count
-  # user1.tag(post1, 'read')
-  # assert_equal 1, post1.taggings.where(context: 'read').size
-  # assert_equal 1, post1.read_users_taggings.count
-  # assert_equal 1, post1.read_users.count
+    assert_equal 0, post1.read_taggings.count
+    assert_equal 0, post1.read_tags.count
 
-  # assert_equal 2, post1.taggings.size
+    post1.read_by tag1, user1
+    assert_equal 1, post1.taggings.where(context: 'read').size
+    assert_equal 1, post1.read_taggings.count
+    assert_equal 1, post1.read_tags.count
+    assert_equal 'vector', post1.read_tag_list
   end
 
 =begin
